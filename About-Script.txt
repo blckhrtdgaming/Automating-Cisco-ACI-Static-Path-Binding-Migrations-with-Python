@@ -1,0 +1,25 @@
+Overview::
+
+This Python script automates the migration and duplication of Cisco ACI Endpoint Group (EPG) static path bindings from a legacy virtual Port Channel (vPC) to new destination vPCs. By leveraging the Cisco APIC REST API, this tool eliminates the need for manual, error-prone data entry when migrating workloads across data center fabrics.
+
+Key Features
+
+Automated Discovery: Queries the APIC to dynamically locate all EPGs currently bound to a specified source vPC.
+
+Seamless Cloning: Duplicates the bindings to multiple destination vPCs while retaining critical configuration parameters, including VLAN encapsulation (encap), deployment mode (mode), and deployment immediacy (instrImedcy).
+
+Built-in Safety Switch: Includes a DRY_RUN toggle to safely preview changes and validate target configurations in the terminal before committing any live updates to the APIC.
+
+Regex-Powered Extraction: Uses case-insensitive regex to safely extract the parent EPG Distinguished Name (DN), bypassing potential string-splitting bugs in newer APIC versions (e.g., v6.0).
+
+
+
+How It Works::
+
+Authenticates with the Cisco APIC via REST using standard credentials.
+
+Queries the fvRsPathAtt class to find all existing static path bindings associated with the defined SOURCE_VPC_TDN.
+
+Iterates through the results to map out the parent EPGs and their specific attributes.
+
+Executes (if DRY_RUN = False) an HTTP POST request to clone the bindings to the new target vPCs provided in the DEST_VPC_LIST.
